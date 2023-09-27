@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Career Shifter</string>
+
+    <string-array name="months">
+        <item>يناير</item>
+        <item>فبراير</item>
+        <item>مارس</item>
+        <item>ابريل</item>
+        <item>مايو</item>
+        <item>يونيو</item>
+        <item>يوليو</item>
+        <item>اغسطس</item>
+        <item>سبتمبر</item>
+        <item>اكتوبر</item>
+        <item>نوفمبر</item>
+        <item>ديسمبر</item>
+
+    </string-array>
+</resources>

@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.TimeLine" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@color/orange</item>
+    </style>
+
+    <style name="Theme.TimeLine" parent="Base.Theme.TimeLine" />
+
+
+    <style name="MySpinnerLook"
+        parent="@android:style/Widget.TextView.SpinnerItem">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+</resources>
