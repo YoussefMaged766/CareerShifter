@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.GridLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -38,12 +39,20 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             dataStore = applicationContext.dataStore
-            if (dataStore.data.first().contains(stringPreferencesKey("pattern"))) {
+            if (dataStore.data.first()
+                    .contains(stringPreferencesKey("pattern")) && dataStore.data.first()
+                    .contains(stringPreferencesKey("month"))
+            ) {
                 binding.txtPattern.setText(getPatternFromDataStore().joinToString(" "))
+
                 calendarAdapter =
                     CalenderAdapter(
                         filterCalendarDataByMonth(
-                            createCalendarData(2023, getPatternFromDataStore()),
+                            createCalendarData2(
+                                Calendar.getInstance().get(Calendar.YEAR),
+                                getPatternFromDataStore(),
+                                getMonthFromDataStore().toInt()
+                            ),
                             Calendar.getInstance().get(Calendar.MONTH)
                         )
                     )
@@ -51,29 +60,30 @@ class MainActivity : AppCompatActivity() {
                 binding.calendarRecyclerView.adapter = calendarAdapter
                 calendarAdapter.notifyDataSetChanged()
 
+
             } else {
-                binding.txtPattern.setText("Pattern not set")
+                binding.txtPattern.hint = "اكتب النمط هنا مثال ليل نهار اجازه"
             }
-
+            Log.e("onCreate: ", getMonthFromDataStore())
         }
 
 
-        lifecycleScope.launch {
-            if (getPatternFromDataStore().isNotEmpty()) {
-                calendarAdapter =
-                    CalenderAdapter(
-                        filterCalendarDataByMonth(
-                            createCalendarData(2023, getPatternFromDataStore()),
-                            Calendar.getInstance().get(Calendar.MONTH)
-                        )
-                    )
-                binding.calendarRecyclerView.adapter = calendarAdapter
-            }
+//        lifecycleScope.launch {
+//            if (getPatternFromDataStore().isNotEmpty()) {
+//                calendarAdapter =
+//                    CalenderAdapter(
+//                        filterCalendarDataByMonth(
+//                            createCalendarData(2023, getPatternFromDataStore()),
+//                            Calendar.getInstance().get(Calendar.MONTH)
+//                        )
+//                    )
+//                binding.calendarRecyclerView.adapter = calendarAdapter
+//            }
+//
+//        }
 
-        }
 
-
-        weekAdapter.submitList(createWeekData(2023, Calendar.getInstance().get(Calendar.MONTH)))
+        weekAdapter.submitList(createWeekData(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH)))
         binding.recyclerDaysOfWeeks.layoutManager =
             GridLayoutManager(this, 7, GridLayoutManager.VERTICAL, false)
         binding.recyclerDaysOfWeeks.adapter = weekAdapter
@@ -85,7 +95,11 @@ class MainActivity : AppCompatActivity() {
                     calendarAdapter =
                         CalenderAdapter(
                             filterCalendarDataByMonth(
-                                createCalendarData(2023, getPatternFromDataStore()),
+                                createCalendarData2(
+                                    Calendar.getInstance().get(Calendar.YEAR),
+                                    getPatternFromDataStore(),
+                                    getMonthFromDataStore().toInt()
+                                ),
                                 position
                             )
                         )
@@ -93,14 +107,19 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            weekAdapter.submitList(createWeekData(2023, position))
+
+            weekAdapter.submitList(createWeekData( Calendar.getInstance().get(Calendar.YEAR), position))
             binding.recyclerDaysOfWeeks.layoutManager =
                 GridLayoutManager(this, 7, GridLayoutManager.VERTICAL, false)
             lifecycleScope.launch {
                 if (getPatternFromDataStore().isNotEmpty()) {
                     calendarAdapter.updateData(
                         filterCalendarDataByMonth(
-                            createCalendarData(2023, getPatternFromDataStore()),
+                            createCalendarData2(
+                                Calendar.getInstance().get(Calendar.YEAR),
+                                getPatternFromDataStore(),
+                                getMonthFromDataStore().toInt()
+                            ),
                             position
                         )
                     )
@@ -120,25 +139,31 @@ class MainActivity : AppCompatActivity() {
         binding.btnApply.setOnClickListener {
 
             lifecycleScope.launch {
-                savePattern("pattern", binding.txtPattern.text.toString())
 
-                calendarAdapter =
-                    CalenderAdapter(
+                    savePattern("pattern", binding.txtPattern.text.toString())
+                    saveMonth("month", Calendar.getInstance().get(Calendar.MONTH).toString())
+
+                    calendarAdapter =
+                        CalenderAdapter(
+                            filterCalendarDataByMonth(
+                                createCalendarData(Calendar.getInstance().get(Calendar.YEAR), getPatternFromDataStore()),
+                                Calendar.getInstance().get(Calendar.MONTH)
+                            )
+                        )
+
+                    // Update the adapter data and notify the RecyclerView of the changes
+                    calendarAdapter.updateData(
                         filterCalendarDataByMonth(
-                            createCalendarData(2023, getPatternFromDataStore()),
-                            8
+                            createCalendarData( Calendar.getInstance().get(Calendar.YEAR), getPattern()),
+                            Calendar.getInstance().get(Calendar.MONTH)
                         )
                     )
 
-                // Update the adapter data and notify the RecyclerView of the changes
-                calendarAdapter.updateData(
-                    filterCalendarDataByMonth(
-                        createCalendarData(2023, getPattern()), 8
-                    )
-                )
+                    calendarAdapter.notifyDataSetChanged()
+                    binding.calendarRecyclerView.adapter = calendarAdapter
 
-                calendarAdapter.notifyDataSetChanged()
-                binding.calendarRecyclerView.adapter = calendarAdapter
+
+
             }
 
 
@@ -147,7 +172,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    private fun createCalendarData(year: Int, pattern: List<String>): List<CalendarDay> {
+    //    private fun createCalendarData(year: Int, pattern: List<String>): List<CalendarDay> {
 //        val calendarDays = mutableListOf<CalendarDay>()
 //        val calendar = Calendar.getInstance()
 //        calendar.set(year, 0, 1)
@@ -180,8 +205,8 @@ class MainActivity : AppCompatActivity() {
 //
 //        return calendarDays
 //    }
-        // worked after current month
-    private fun createCalendarData( year: Int,pattern: List<String>): List<CalendarDay> {
+    // worked after current month
+    private fun createCalendarData(year: Int, pattern: List<String>): List<CalendarDay> {
         val calendarDays = mutableListOf<CalendarDay>()
         val calendar = Calendar.getInstance()
 
@@ -216,7 +241,42 @@ class MainActivity : AppCompatActivity() {
         return calendarDays
     }
 
+    private fun createCalendarData2(
+        year: Int,
+        pattern: List<String>,
+        currentMonth: Int
+    ): List<CalendarDay> {
+        val calendarDays = mutableListOf<CalendarDay>()
+        val calendar = Calendar.getInstance()
 
+
+        val patterns = pattern
+
+        var patternIndex = 0
+        for (month in currentMonth until Calendar.DECEMBER + 1) {
+            calendar.set(year, month, 1)
+            while (calendar.get(Calendar.MONTH) == month) {
+                val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+                // Assign the pattern based on the day of the week
+                val notePattern = patterns[patternIndex]
+
+                calendarDays.add(
+                    CalendarDay(
+                        dayOfMonth = dayOfMonth,
+                        notePattern = notePattern,
+                        month = month
+                    )
+                )
+
+                // Move to the next day
+                calendar.add(Calendar.DAY_OF_MONTH, 1)
+                patternIndex = (patternIndex + 1) % patterns.size
+            }
+        }
+        Log.e("createCalendarData: ", calendarDays.toString())
+
+        return calendarDays
+    }
 
 
     private fun filterCalendarDataByMonth(
@@ -289,6 +349,22 @@ class MainActivity : AppCompatActivity() {
         dataStore.edit {
             it[dataStoreKey] = value
         }
+    }
+
+    private suspend fun saveMonth(key: String, value: String) {
+        dataStore = applicationContext.dataStore
+        val dataStoreKey = stringPreferencesKey(key)
+        dataStore.edit {
+            it[dataStoreKey] = value
+        }
+    }
+
+    private suspend fun getMonthFromDataStore(): String {
+        dataStore = applicationContext.dataStore
+        val dataStoreKey = stringPreferencesKey("month")
+        val preferences = dataStore.data.first()
+        val month = preferences[dataStoreKey] ?: " "
+        return month
     }
 
     private suspend fun getPatternFromDataStore(): List<String> {
