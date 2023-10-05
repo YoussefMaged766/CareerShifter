@@ -28,12 +28,13 @@
         android:id="@+id/txtPattern"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/_16sdp"
         android:hint=" مثال : ليل اجازه نهار  "
-        android:padding="16dp"
+        android:padding="@dimen/_16sdp"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:textSize="@dimen/_14ssp"
         app:layout_constraintTop_toBottomOf="@id/MonthSpinner" />
 
     <com.google.android.material.button.MaterialButton

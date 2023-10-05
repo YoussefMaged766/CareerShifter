@@ -1,14 +1,11 @@
-package com.example.timeline
+package com.devYoussef.timeline
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.timeline.databinding.CalenderCellBinding
-import com.example.timeline.databinding.ItemCalendarDayBinding
+import com.devYoussef.timeline.databinding.ItemCalendarDayBinding
 
 class WeekAdapter : ListAdapter<CalendarDayOfWeek, WeekAdapter.CalenderViewHolder>(CalenderDiffCallback()) {
 

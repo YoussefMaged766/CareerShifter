@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.timeline"
+    namespace = "com.devYoussef.timeline"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.timeline"
+        applicationId = "com.devYoussef.timeline"
         minSdk = 28
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,6 +53,9 @@ dependencies {
 
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
 
+    // ssp,sdp
+    implementation("com.intuit.ssp:ssp-android:1.1.0")
+    implementation("com.intuit.sdp:sdp-android:1.0.6")
 
 
 }

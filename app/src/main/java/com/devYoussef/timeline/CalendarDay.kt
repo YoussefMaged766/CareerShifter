@@ -1,4 +1,4 @@
-package com.example.timeline
+package com.devYoussef.timeline
 
 import kotlinx.serialization.Serializable
 

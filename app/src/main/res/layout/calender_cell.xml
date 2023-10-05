@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="night"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtCalenderDay" />
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2"
-            android:textSize="20sp"
+            android:textSize="@dimen/_20ssp"
             android:textStyle="bold"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"

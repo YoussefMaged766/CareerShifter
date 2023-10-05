@@ -1,15 +1,11 @@
-package com.example.timeline
+package com.devYoussef.timeline
 
 import android.graphics.Color
-import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.timeline.databinding.CalenderCellBinding
+import com.devYoussef.timeline.databinding.CalenderCellBinding
 import java.util.Calendar
 
 class CalenderAdapter(var calendarDays : List<CalendarDay>) : RecyclerView.Adapter<CalenderAdapter.CalenderViewHolder>() {

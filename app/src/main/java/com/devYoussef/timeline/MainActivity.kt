@@ -1,13 +1,11 @@
-package com.example.timeline
+package com.devYoussef.timeline
 
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.GridLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -15,9 +13,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.timeline.Constants.dataStore
-import com.example.timeline.databinding.ActivityMainBinding
+import com.devYoussef.timeline.Constants.dataStore
+import com.devYoussef.timeline.databinding.ActivityMainBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -211,13 +208,14 @@ class MainActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
 
         val currentMonth = calendar.get(Calendar.MONTH)
+        val currentDayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
 
         val patterns = pattern
 
         var patternIndex = 0
         for (month in currentMonth until Calendar.DECEMBER + 1) {
-            calendar.set(year, month, 1)
+            calendar.set(year, month, if (month == currentMonth) currentDayOfMonth else 1)
             while (calendar.get(Calendar.MONTH) == month) {
                 val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
                 // Assign the pattern based on the day of the week
@@ -249,12 +247,13 @@ class MainActivity : AppCompatActivity() {
         val calendarDays = mutableListOf<CalendarDay>()
         val calendar = Calendar.getInstance()
 
+        val currentDayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
         val patterns = pattern
 
         var patternIndex = 0
         for (month in currentMonth until Calendar.DECEMBER + 1) {
-            calendar.set(year, month, 1)
+            calendar.set(year, month,  if (month == currentMonth) currentDayOfMonth else 1)
             while (calendar.get(Calendar.MONTH) == month) {
                 val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
                 // Assign the pattern based on the day of the week

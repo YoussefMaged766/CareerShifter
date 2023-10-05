@@ -1,4 +1,4 @@
-package com.example.timeline
+package com.devYoussef.timeline
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
