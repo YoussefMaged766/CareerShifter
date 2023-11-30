@@ -34,7 +34,8 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_14ssp
+"
         app:layout_constraintTop_toBottomOf="@id/MonthSpinner" />
 
     <com.google.android.material.button.MaterialButton
