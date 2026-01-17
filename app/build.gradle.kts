@@ -1,3 +1,7 @@
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -5,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.devYoussef.timeline"
-    compileSdk = 33
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.devYoussef.timeline"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 36
         versionCode = 2
         versionName = "1.0.1"
 
@@ -27,11 +31,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_19
+        targetCompatibility = JavaVersion.VERSION_19
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    tasks.withType<KotlinCompile>().configureEach {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_19)
+        }
     }
     buildFeatures{
         viewBinding = true
@@ -40,22 +46,22 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.core:core-ktx:1.17.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.google.android.material:material:1.13.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
 
-    implementation ("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    implementation ("androidx.datastore:datastore-preferences:1.2.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
 
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
     // ssp,sdp
-    implementation("com.intuit.ssp:ssp-android:1.1.0")
-    implementation("com.intuit.sdp:sdp-android:1.0.6")
+    implementation("com.intuit.ssp:ssp-android:1.1.1")
+    implementation("com.intuit.sdp:sdp-android:1.1.1")
 
 
 }
