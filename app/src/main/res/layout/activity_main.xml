@@ -28,6 +28,7 @@
         android:layout_marginStart="8dp"
         android:textColor="@color/black"
         android:textSize="24sp"
+        android:visibility="invisible"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/YearTextView"
         app:layout_constraintTop_toTopOf="parent" />

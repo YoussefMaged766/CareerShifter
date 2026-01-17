@@ -79,6 +79,18 @@ class MainActivity : AppCompatActivity() {
             )
             calendarAdapter = CalenderAdapter(calendarData)
 
+            // Setup GridLayoutManager with span size lookup for month headers
+            val layoutManager = GridLayoutManager(this@MainActivity, 7, GridLayoutManager.VERTICAL, false)
+            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return when (calendarAdapter?.calendarItems?.get(position)) {
+                        is CalendarItem.MonthHeader -> 7 // Full width for month headers
+                        else -> 1 // Single column for days and empty cells
+                    }
+                }
+            }
+            binding.calendarRecyclerView.layoutManager = layoutManager
+
             binding.calendarRecyclerView.adapter = calendarAdapter
             calendarAdapter?.notifyDataSetChanged()
             Log.e("onCreate: ", getMonthFromDataStore())
@@ -99,10 +111,10 @@ class MainActivity : AppCompatActivity() {
             // Add scroll listener to detect visible month
             setupScrollListener()
             
-            // Add snap scrolling
-            setupSnapScrolling()
-            
-            // Scroll to current day after layout is complete
+            // Don't use snap scrolling - it interferes with manual scrolling
+            // setupSnapScrolling()
+
+            // Scroll to current day after layout is complete (only happens in onCreate)
             binding.calendarRecyclerView.post {
                 scrollToCurrentDay()
             }
@@ -137,6 +149,19 @@ class MainActivity : AppCompatActivity() {
                         12 // Show all 12 months
                     )
                     calendarAdapter = CalenderAdapter(calendarData)
+
+                    // Setup GridLayoutManager with span size lookup for month headers
+                    val layoutManager = GridLayoutManager(this@MainActivity, 7, GridLayoutManager.VERTICAL, false)
+                    layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int): Int {
+                            return when (calendarAdapter?.calendarItems?.get(position)) {
+                                is CalendarItem.MonthHeader -> 7 // Full width for month headers
+                                else -> 1 // Single column for days and empty cells
+                            }
+                        }
+                    }
+                    binding.calendarRecyclerView.layoutManager = layoutManager
+
                     binding.calendarRecyclerView.adapter = calendarAdapter
                     calendarAdapter?.notifyDataSetChanged()
                     
@@ -153,7 +178,10 @@ class MainActivity : AppCompatActivity() {
                     
                     // Setup scroll listener
                     setupScrollListener()
-                    setupSnapScrolling()
+                    // Don't use snap scrolling - it interferes with manual scrolling
+                    // setupSnapScrolling()
+
+                    // Don't scroll to current day in onResume - only in onCreate
                 }
             }
         }
@@ -257,6 +285,9 @@ class MainActivity : AppCompatActivity() {
         var month = startMonth
         
         for (i in 0 until numberOfMonths) {
+            // Add month header at the beginning of each month
+            allCalendarItems.add(CalendarItem.MonthHeader(month, year))
+
             calendar.set(year, month, 1)
             val lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
             val isCurrentMonthInRealTime = (year == currentYear && month == currentMonth)
@@ -417,9 +448,9 @@ class MainActivity : AppCompatActivity() {
             
             // Add 2 empty rows (14 cells) between months, except after the last month
             if (i < numberOfMonths - 1) {
-                for (empty in 0 until 14) {
-                    allCalendarItems.add(CalendarItem.Empty)
-                }
+//                for (empty in 0 until 14) {
+//                    allCalendarItems.add(CalendarItem.Empty)
+//                }
             }
             
             // Move to next month
@@ -752,7 +783,7 @@ class MainActivity : AppCompatActivity() {
                                         break
                                     }
                                 }
-                                
+
                                 // Look forwards for next month
                                 var nextMonth: Int? = null
                                 var nextMonthDistance = Int.MAX_VALUE
@@ -764,7 +795,7 @@ class MainActivity : AppCompatActivity() {
                                         break
                                     }
                                 }
-                                
+
                                 // Choose the closest month
                                 when {
                                     previousMonth != null && nextMonth != null -> {
@@ -877,10 +908,14 @@ class MainActivity : AppCompatActivity() {
                         // We want to scroll to a position in the white area so the detector picks up current month
                         var scrollPosition = firstDayPosition
                         
-                        // Look backwards from first day to find the start of empty cells
+                        // Look backwards from first day to find the start of empty cells or month header
                         for (i in firstDayPosition downTo 0) {
                             if (adapter.calendarItems[i] is CalendarItem.Empty) {
                                 scrollPosition = i
+                            } else if (adapter.calendarItems[i] is CalendarItem.MonthHeader) {
+                                // Found the month header for current month, scroll to it
+                                scrollPosition = i
+                                break
                             } else if (adapter.calendarItems[i] is CalendarItem.Day) {
                                 // Found a day from previous month, use the position after it
                                 // This will be in the white area before current month

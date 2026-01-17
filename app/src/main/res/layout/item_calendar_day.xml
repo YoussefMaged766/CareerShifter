@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Sun"
         android:textColor="@color/black"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

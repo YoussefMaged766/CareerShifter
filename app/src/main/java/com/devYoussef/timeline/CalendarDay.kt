@@ -18,4 +18,5 @@ data class CalendarDayOfWeek(
 sealed class CalendarItem {
     data class Day(val calendarDay: CalendarDay) : CalendarItem()
     object Empty : CalendarItem()
+    data class MonthHeader(val month: Int, val year: Int) : CalendarItem()
 }
