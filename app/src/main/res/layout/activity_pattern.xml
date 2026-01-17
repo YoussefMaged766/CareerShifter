@@ -22,11 +22,26 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="32dp" />
 
+    <TextView
+        android:id="@+id/txtNote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="ملاحظة: النمط سيبدأ من اليوم الحالي"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:gravity="start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtTitle" />
+
     <EditText
         android:id="@+id/txtPattern"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_margin="@dimen/_16sdp"
         android:hint="مثال : ليل اجازه نهار"
         android:padding="@dimen/_16sdp"
@@ -36,7 +51,7 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtTitle" />
+        app:layout_constraintTop_toBottomOf="@id/txtNote" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSave"

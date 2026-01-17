@@ -14,3 +14,8 @@ data class CalendarDayOfWeek(
     val dayName: String? = null,
     val dayOfMonth: Int? = null
 )
+
+sealed class CalendarItem {
+    data class Day(val calendarDay: CalendarDay) : CalendarItem()
+    object Empty : CalendarItem()
+}
