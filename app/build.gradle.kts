@@ -1,6 +1,8 @@
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Properties
+import java.io.FileInputStream
 
 plugins {
     id("com.android.application")
@@ -21,6 +23,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -28,6 +32,14 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfigs {
+                create("release") {
+                    storeFile =  rootProject.file("D:/AndroidProjects/TimeLine/career.jks")
+                    storePassword = "123456"
+                    keyAlias = "key0"
+                    keyPassword = "123456"
+                }
+            }
         }
     }
     compileOptions {
